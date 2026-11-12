@@ -20,7 +20,7 @@ jobs:
           java-version: '17'
 
       - name: Extract Android project
-        run: unzip -q TourCollectionManager_Corrected_Project.zip
+        run: unzip -q TourCollectionManager_JVM17_Fixed.zip
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
