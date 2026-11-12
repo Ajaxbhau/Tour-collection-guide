@@ -1,4 +1,3 @@
-
 name: Build Android APK
 
 on:
@@ -9,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -19,18 +19,21 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Extract Android project
+        run: unzip -q TourCollectionManager_Corrected_Project.zip
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
       - name: Build debug APK
-        run: gradle assembleDebug
+        run: gradle -p TourCollectionManager assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Tour-Collection-Manager-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: TourCollectionManager/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           
