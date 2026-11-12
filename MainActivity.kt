@@ -87,7 +87,7 @@ class MainActivity : ComponentActivity() {
             addView(text("TOTAL COLLECTION  ·  ${rows.size} STUDENTS", 10f, Color.rgb(185, 200, 229), true))
         })
         space(14)
-        addView(text("Collection by section", 18f, ink, true))
+        root.addView(text("Collection by section", 18f, ink, true))
         space(8)
         val summary = card()
         listOf("A", "B", "C").forEach { sec ->
@@ -101,7 +101,7 @@ class MainActivity : ComponentActivity() {
         }
         root.addView(summary)
         space(14)
-        addView(button("＋  Add student entry", { showEditor(null) }, true), LinearLayout.LayoutParams(-1, dp(52)))
+        root.addView(button("＋  Add student entry", { showEditor(null) }, true), LinearLayout.LayoutParams(-1, dp(52)))
         space(8)
         val actions = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
         actions.addView(button("Download PDF", { exportRows = store.all(); pdfCreator.launch("Tour_Collection_Report.pdf") }), LinearLayout.LayoutParams(0, dp(48), 1f))
@@ -109,8 +109,8 @@ class MainActivity : ComponentActivity() {
         actions.addView(button("Export Excel CSV", { exportRows = store.all(); csvCreator.launch("Tour_Collection_Records.csv") }), LinearLayout.LayoutParams(0, dp(48), 1f))
         root.addView(actions)
         space(18)
-        addView(text("Student records", 18f, ink, true))
-        addView(text("Tap Edit to change an entry or Delete to remove it.", 12f, muted))
+        root.addView(text("Student records", 18f, ink, true))
+        root.addView(text("Tap Edit to change an entry or Delete to remove it.", 12f, muted))
         space(8)
         if (rows.isEmpty()) {
             val empty = card(); empty.addView(text("No entries yet", 16f, ink, true)); empty.addView(text("Add the first student's name, section and amount.", 13f, muted)); root.addView(empty)
@@ -127,7 +127,7 @@ class MainActivity : ComponentActivity() {
             item.addView(controls); root.addView(item); space(8)
         }
         space(10)
-        addView(text("Data stays on this phone. Export a backup regularly.", 11f, muted))
+        root.addView(text("Data stays on this phone. Export a backup regularly.", 11f, muted))
     }
     private fun space(h: Int) { root.addView(Space(this), LinearLayout.LayoutParams(1, dp(h))) }
 
