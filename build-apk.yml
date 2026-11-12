@@ -3,27 +3,37 @@ name: Build Android APK
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'TourCollectionManager-source.zip'
-      - '.github/workflows/build-apk.yml'
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Set up Java 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Extract Android project archive
-        run: unzip -q TourCollectionManager-source.zip
+      - name: Extract Android project
+        run: unzip -q TourCollectionManager_CompileFix.zip
 
-      - name: Set up Gradle 8.9
+      - name: Use fixed MainActivity
+        run: cp MainActivity.kt TourCollectionManager/app/src/main/java/com/tms/tourcollection/MainActivity.kt
+
+      - name: Add app icon
+        run: |
+          mkdir -p TourCollectionManager/app/src/main/res/mipmap-xxxhdpi
+          cp file_00000000b55c8211ada8ce0fa0afcd5d.png TourCollectionManager/app/src/main/res/mipmap-xxxhdpi/app_icon.png
+          M=TourCollectionManager/app/src/main/AndroidManifest.xml
+          sed -i -E 's/android:(icon|roundIcon)="[^"]*"//g' $M
+          sed -i 's/<application/<application android:icon="@mipmap\/app_icon"/' $M
+
+      - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
@@ -37,4 +47,3 @@ jobs:
           name: Tour-Collection-Manager-APK
           path: TourCollectionManager/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
-          
