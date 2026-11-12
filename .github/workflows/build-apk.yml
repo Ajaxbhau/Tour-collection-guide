@@ -22,6 +22,9 @@ jobs:
       - name: Extract Android project
         run: unzip -q TourCollectionManager_CompileFix.zip
 
+      - name: Use fixed MainActivity
+        run: cp MainActivity.kt TourCollectionManager/app/src/main/java/com/tms/tourcollection/MainActivity.kt
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -36,4 +39,3 @@ jobs:
           name: Tour-Collection-Manager-APK
           path: TourCollectionManager/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
-          
