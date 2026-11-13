@@ -5,6 +5,9 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,14 +28,6 @@ jobs:
       - name: Use fixed MainActivity
         run: cp MainActivity.kt TourCollectionManager/app/src/main/java/com/tms/tourcollection/MainActivity.kt
 
-      - name: Add app icon
-        run: |
-          mkdir -p TourCollectionManager/app/src/main/res/mipmap-xxxhdpi
-          cp file_00000000b55c8211ada8ce0fa0afcd5d.png TourCollectionManager/app/src/main/res/mipmap-xxxhdpi/app_icon.png
-          M=TourCollectionManager/app/src/main/AndroidManifest.xml
-          sed -i -E 's/android:(icon|roundIcon)="[^"]*"//g' $M
-          sed -i 's/<application/<application android:icon="@mipmap\/app_icon"/' $M
-
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -47,3 +42,10 @@ jobs:
           name: Tour-Collection-Manager-APK
           path: TourCollectionManager/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Tour Collection Manager v${{ github.run_number }}
+          files: TourCollectionManager/app/build/outputs/apk/debug/app-debug.apk
